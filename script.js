@@ -23,41 +23,19 @@ let timer = document.querySelector(".countdown");     // selecting timer paragra
 let randomNum = Math.floor(Math.random() * 10);     //generating random number
 testSpeech.innerText = randomSentences[randomNum];      // setting test sentence 
 let testHeading = randomSentences[randomNum][0];
-const STARTING_SEC = 2;
+const STARTING_SEC = 29;
 let time = STARTING_SEC;
 let intervalID = 0;
-let correctWords=0;
-let totalWords=testHeading.split(" ").length;
-let userString="";
-let masterString="";
-let totalChr=0;
-
-
-// new text is generated when button is clicked
-newBtn.addEventListener("click", () => {
-    let num = Math.floor(Math.random() * 10);
-    while (num == randomNum) {
-        num = Math.floor(Math.random() * 10);
-    }
-    testSpeech.innerText = randomSentences[num];
-    textArea.disabled=false;
-    timer.style.marginTop="1.65rem";
-    timer.style.marginBottom="1.5rem";
-    textArea.style.marginTop="35px";
-    textArea.style.marginBottom="35px";
-    textArea.style.height="30%";
-    resultSpeed.style.display="none";
-    textArea.value="";
-
-})
+let correctWords = 0;
+let totalWords = testHeading.split(" ").length;
 
 
 //function to find total characters in the user input excluding white spaces
-function findTotalChr(){
-    let splitString=textArea.value.trim().split(" ");
-    let count=0;
-    for(let i=0;i<splitString.length;i++){
-        count=count+splitString[i].length;
+function findTotalChr() {
+    let splitString = textArea.value.trim().split(" ");
+    let count = 0;
+    for (let i = 0; i < splitString.length; i++) {
+        count = count + splitString[i].length;
     }
     return count;
 }
@@ -65,44 +43,47 @@ function findTotalChr(){
 
 //function to calculate result and accuracy
 function checkResult() {
-     userString = ((textArea.value).trim()).split(" ");
-     masterString = testHeading.split(" ");
-    totalChr=findTotalChr();
-    let correctChr=0;
-    for(let i=0;i<Math.min(userString.length,masterString.length);i++){
-        for(let j=0;j<Math.min(userString[i].length,masterString[i].length);j++){
-            if(userString[i][j]==masterString[i][j]){
+    let userString = ((textArea.value).trim()).split(" ");
+    let masterString = testHeading.split(" ");
+    let totalChr = findTotalChr();
+    let correctChr = 0;
+    
+    //calculating correct characters from the user input for accuracy
+    for (let i = 0; i < Math.min(userString.length, masterString.length); i++) {
+        for (let j = 0; j < Math.min(userString[i].length, masterString[i].length); j++) {
+            if (userString[i][j] == masterString[i][j]) {
                 correctChr++;
-                // console.log("correctChr");
             }
 
         }
     }
-    for(let i=0;i<Math.min(userString.length,masterString.length);i++){
-        if(userString[i] === masterString[i]){
+
+    //calculating correct words from the user input for speed
+    for (let i = 0; i < Math.min(userString.length, masterString.length); i++) {
+        if (userString[i] === masterString[i]) {
             correctWords++;
-        }else{
+        } else {
 
         }
     }
-    newBtn.style.display="inline-block";
-    let accuracy=Math.floor((correctChr/totalChr)*100);
-    textArea.style.height="17%";
-    timer.style.marginTop="1rem";
-    timer.style.marginBottom="0rem";
-    textArea.style.marginTop="24px";
-    textArea.style.marginBottom="24px";
-    result1.innerText=`Your typing speed is ${correctWords*2} words per minute`;
-    result2.innerText=`Your typing accuracy is ${accuracy}%`; 
-    resultSpeed.style.display="inline-block"
+    newBtn.style.display = "inline-block";
+    let accuracy = Math.floor((correctChr / totalChr) * 100);
+    textArea.style.height = "17%";
+    timer.style.marginTop = "1rem";
+    timer.style.marginBottom = "0rem";
+    textArea.style.marginTop = "24px";
+    textArea.style.marginBottom = "24px";
+    result1.innerText = `Your typing speed is ${correctWords * 2} words per minute`;
+    result2.innerText = `Your typing accuracy is ${accuracy}%`;
+    resultSpeed.style.display = "inline-block"
 }
 
 
 //countdown interval function
 function countDown() {
     if (time < 0) {
-        textArea.disabled=true;
-        timer.innerText="TIME OUT!!!"
+        textArea.disabled = true;
+        timer.innerText = "TIME OUT!!!"
         clearInterval(intervalID);
         checkResult();
     } else {
@@ -115,7 +96,7 @@ function countDown() {
 
 //event listener to remove new text btn once user is giving some input
 textArea.addEventListener("input", () => {
-    newBtn.style.display="none";
+    newBtn.style.display = "none";
 });
 
 
@@ -127,26 +108,49 @@ function timerStart() {
 textArea.addEventListener("input", timerStart);
 
 
-
-
 //timer is reset and textarea is cleared when reset button is clicked
 resetBtn.addEventListener("click", () => {
     time = STARTING_SEC;
     textArea.value = "";
     timer.innerText = "TIMER : 30 SEC";
-    newBtn.style.display="inline-block";
-    resultSpeed.style.display="none";
-    textArea.style.height="30%";
-    timer.style.marginTop="1.65rem";
-    timer.style.marginBottom="1.5rem";
-    textArea.style.marginTop="35px";
-    textArea.style.marginBottom="35px";
-    textArea.disabled=false;
+    newBtn.style.display = "inline-block";
+    resultSpeed.style.display = "none";
+    textArea.style.height = "30%";
+    timer.style.marginTop = "1.65rem";
+    timer.style.marginBottom = "1.5rem";
+    textArea.style.marginTop = "35px";
+    textArea.style.marginBottom = "35px";
+    textArea.disabled = false;
     clearInterval(intervalID);
     textArea.addEventListener("input", timerStart);
-    correctWords=0;
-
+    correctWords = 0;
 });
+
+
+// new text is generated when button is clicked
+newBtn.addEventListener("click", () => {
+    let num = Math.floor(Math.random() * 10);
+    while (num == randomNum) {
+        num = Math.floor(Math.random() * 10);
+    }
+    time = STARTING_SEC;
+    testSpeech.innerText = randomSentences[num];
+    textArea.disabled = false;
+    timer.style.marginTop = "1.65rem";
+    timer.style.marginBottom = "1.5rem";
+    timer.innerText = "TIMER : 30 SEC";
+    textArea.style.marginTop = "35px";
+    textArea.style.marginBottom = "35px";
+    textArea.style.height = "30%";
+    resultSpeed.style.display = "none";
+    textArea.value = "";
+    testHeading = randomSentences[num][0];
+    totalWords = testHeading.split(" ").length;
+    correctWords = 0;
+    clearInterval(intervalID);
+    textArea.addEventListener("input", timerStart);
+
+})
 
 
 //changing colour of buttons when hover action in performed on them
